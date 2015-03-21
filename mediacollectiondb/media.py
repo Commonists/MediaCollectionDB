@@ -18,6 +18,11 @@ class MediaCollection(object):
     def __init__(self, filename):
         self.connection = sqlite3.connect(filename)
         self.cursor = self.connection.cursor()
+        table_creation = """CREATE TABLE IF NOT EXISTS %s
+                                (date, name, donation, comment)
+                        """ % MediaCollection.COLLECTIONS_TABLE
+        self.cursor.execute(table_creation)
+        self.cursor.commit()
 
     def add(self, media):
         """ Add media to the persistent media collection.

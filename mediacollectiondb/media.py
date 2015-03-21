@@ -19,7 +19,16 @@ class MediaCollection(object):
         self.connection = sqlite3.connect(filename)
         self.cursor = self.connection.cursor()
         table_creation = """CREATE TABLE IF NOT EXISTS %s
-                                (date, name, donation, comment)
+                                (pageid, 
+                                filename,
+                                uploader,
+                                width,
+                                height,
+                                size,
+                                quality_image,
+                                featured_pictured,
+                                valued_image,
+                                timestamp)
                         """ % MediaCollection.COLLECTIONS_TABLE
         self.cursor.execute(table_creation)
         self.cursor.commit()

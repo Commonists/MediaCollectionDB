@@ -23,3 +23,9 @@ class MediaCollectionsMetrics(object):
     def mediacount(self):
         """ Return the mediacount metric. """
         return len(self.listall())
+
+    def qicount(self):
+        """ Return the qicount metric which represents the amount of 
+        quality images in the set of collection."""
+        qualityimages = [qi for qi in self.listall() if qi.quality_image]
+        return len(qualityimages)

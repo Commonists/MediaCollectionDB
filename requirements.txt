@@ -1,0 +1,4 @@
+argparse
+sqlite3
+mwclient
+six # As mwclient 0.7.1 does not properly require installation of six

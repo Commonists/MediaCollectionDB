@@ -39,3 +39,9 @@ class MediaCollectionsMetrics(object):
         in the set of collections. """
         valuedimages = [vi for vi in self.listall() if vi.valued_image]
         return len(valuedimages)
+
+    def fpcount(self):
+        """ Returns the fpcount metric which represents the amount of featured
+        pictures in the set of collections."""
+        featuredpictures = [fp for fp in self.listall() if fp.featured_picture]
+        return len(featuredpictures)

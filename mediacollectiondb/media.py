@@ -124,7 +124,7 @@ class MediaCollection(object):
         """
         select_query = """SELECT * FROM %s
             WHERE pageid=?""" % MediaCollection.COLLECTIONS_TABLE
-        self.cursor.execute(select_query, media.pageid)
+        self.cursor.execute(select_query, (media.pageid,))
         pages = self.cursor.fetchall()
         return len(pages) > 0
 
@@ -151,7 +151,7 @@ class MediaCollection(object):
 
     def insert(self, media):
         """ Inserting a media into the database. """
-        insert_query = """INSERT INTO %s VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        insert_query = """INSERT INTO %s VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """ % MediaCollection.COLLECTIONS_TABLE
         self.cursor.execute(insert_query, media.totuple())
         self.connection.commit()

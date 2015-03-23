@@ -20,7 +20,7 @@ class MediaCollectionsMetrics(object):
         if self.cache_allmedia is None:
             self.cache_allmedia = []
             for collection in self.collections:
-                self.cache_allmedia.append(collection.listall())
+                self.cache_allmedia.extend(collection.listall())
         # else returns the cache value
         return self.cache_allmedia
 
@@ -37,5 +37,5 @@ class MediaCollectionsMetrics(object):
     def vicount(self):
         """ Return the vicount metric which counts the amount of valued images
         in the set of collections. """
-        valuedimages = [vi for vi in self.listall() if vi.valued_images]
+        valuedimages = [vi for vi in self.listall() if vi.valued_image]
         return len(valuedimages)

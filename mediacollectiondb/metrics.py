@@ -6,7 +6,9 @@ class MediaCollectionsMetrics(object):
     """ Media Collections Metrics.
 
     Attributes:
-            collections (list): list of MediaCollections
+        collections (list): list of MediaCollections
+        cache_allmedia (list): cache list of all the media.Media from
+            collections. None until cache is filled.
     """
 
     def __init__(self, collections):
@@ -45,3 +47,18 @@ class MediaCollectionsMetrics(object):
         pictures in the set of collections."""
         featuredpictures = [fp for fp in self.listall() if fp.featured_picture]
         return len(featuredpictures)
+
+    def widthcount(self, width):
+        """ Return the widthcount metric which represents the amount
+        of pictures with a wider border greater than the minimal width.
+
+        Args:
+            width (int): minimal width.
+
+        Returns:
+            int: amount of picture with a wider border greater than minimal
+                width
+        """
+        widthimages = [img for img in self.listall()
+                       if img.width >= width or img.height >= width]
+        return len(widthimages)

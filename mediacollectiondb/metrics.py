@@ -62,3 +62,12 @@ class MediaCollectionsMetrics(object):
         widthimages = [img for img in self.listall()
                        if img.width >= width or img.height >= width]
         return len(widthimages)
+
+    def pixelcount(self):
+        """ Return the total amount of pixels within all media collections. """
+        return sum([img.size for img in self.listall()])
+
+    def qualitypixelcount(self):
+        """ Return the total amount of pixels from quality images in all media
+        collections."""
+        return sum([img.size for img in self.listall() if img.quality_image])

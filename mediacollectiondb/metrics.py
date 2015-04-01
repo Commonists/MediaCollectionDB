@@ -12,7 +12,11 @@ class MediaCollectionsMetrics(object):
     """
 
     def __init__(self, collections):
-        """ Constructor. """
+        """ Constructor. 
+        
+        Args:
+            collections (list): list of MediaCollections
+        """
         self.collections = collections
         self.cache_allmedia = None
 

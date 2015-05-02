@@ -15,6 +15,8 @@ COMMONS_QI_CATEGORY = 'Category:Quality images'
 COMMONS_FP_CATEGORY = 'Category:Featured pictures on Wikimedia Commons'
 COMMONS_VI_CATEGORY = 'Category:Valued images sorted by promotion date'
 
+DEFAULT_DB_FILE = 'category.db'
+
 
 def updatecategory(mediadatabase, category):
     """ adds media from a category to a database.
@@ -60,8 +62,14 @@ def main():
                         required=False,
                         default=COMMONS_DEFAULT_CATEGORY,
                         help="Media Category")
+    parser.add_argument("-f", "--file",
+                        type=str,
+                        dest="file",
+                        require=False,
+                        default=DEFAULT_DB_FILE,
+                        help="Database file, default: category.db")
     args = parser.parse_args()
-    mediadatabase = media.MediaCollection('category.db')
+    mediadatabase = media.MediaCollection(args.file)
     updatecategory(mediadatabase, args.category)
     print "--- Ended in %s seconds" % (time.time() - start_time)
 

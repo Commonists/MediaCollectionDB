@@ -1,4 +1,6 @@
-""" mediacollectiondb database define the media collection datbase
+"""Media and MediaCollection representations."""
+
+"""mediacollectiondb database define the media collection datbase
 and provides tools to manage the database.
 """
 
@@ -7,7 +9,7 @@ import sqlite3
 
 class Media(object):
 
-    """ Media representation in database.
+    """Media representation in database.
 
     Attributes:
         pageid (str): MediaWiki pageid
@@ -27,7 +29,7 @@ class Media(object):
     def __init__(self, pageid, filename, uploader=None, width=None,
                  height=None, size=None, quality_image=None,
                  featured_picture=None, valued_image=None, timestamp=None):
-        """ Constructor.
+        """Constructor.
 
         Args:
             pageid (str): MediaWiki pageid
@@ -56,22 +58,21 @@ class Media(object):
         self.timestamp = timestamp
 
     def totuple(self):
-        """ Return the object as a tuple of all values. """
+        """Return the object as a tuple of all values."""
         return (self.pageid, self.filename, self.uploader, self.width,
                 self.height, self.size, self.quality_image,
                 self.featured_picture, self.valued_image, self.timestamp)
 
     @classmethod
     def fromtuple(cls, media):
-        """ Return a Media from a tuple. """
+        """Return a Media from a tuple."""
         return cls(media[0], media[1], media[2], media[3], media[4], media[5],
                    media[6], media[7], media[8], media[9])
 
 
 class MediaCollection(object):
 
-    """ Persistent media collection, i.e. collection saved into
-    SQLite database.
+    """Persistent media collection, i.e. collection saved into SQLite database.
 
     Attributes:
         connection: sqlite connection.
@@ -99,7 +100,7 @@ class MediaCollection(object):
         self.connection.commit()
 
     def save(self, media):
-        """ Add media to the persistent media collection.
+        """Add media to the persistent media collection.
 
         Args:
             media: media object to save to the into the persistent collection.
@@ -110,7 +111,7 @@ class MediaCollection(object):
             self.insert(media)
 
     def exists(self, media):
-        """ Testing whether a media is already in database or not.
+        """Test whether a media is already in database or not.
 
         In order to test whether the media is already in the database we count
         whether there is more than 0 element in the table with the same pageid
@@ -129,7 +130,7 @@ class MediaCollection(object):
         return len(pages) > 0
 
     def update(self, media):
-        """ Updating a media already in database. """
+        """Update a media already in database."""
         update_query = """UPDATE %s
             SET
                 filename=?,
@@ -150,19 +151,19 @@ class MediaCollection(object):
         self.connection.commit()
 
     def insert(self, media):
-        """ Inserting a media into the database. """
+        """Insert a media into the database."""
         insert_query = """INSERT INTO %s VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """ % MediaCollection.COLLECTIONS_TABLE
         self.cursor.execute(insert_query, media.totuple())
         self.connection.commit()
 
     def listall(self):
-        """ List all elements of the collection. """
+        """List all elements of the collection."""
         list_query = """SELECT * FROM %s""" % MediaCollection.COLLECTIONS_TABLE
         self.cursor.execute(list_query)
         return [Media.fromtuple(media) for media in self.cursor.fetchall()]
 
     def reset(self):
-        """ Delete all entry in the database. """
+        """Delete all entry in the database."""
         reset_query = "DELETE * FROM %s" % MediaCollection.COLLECTIONS_TABLE
         self.cursor.execute(reset_query)

@@ -1,4 +1,4 @@
-""" updatedb module allows you to update a media collection database. """
+"""updatedb module allows you to update a media collection database."""
 
 import time
 
@@ -19,7 +19,7 @@ DEFAULT_DB_FILE = 'category.db'
 
 
 def updatecategory(mediadatabase, category):
-    """ adds media from a category to a database.
+    """Add media from a category to a database.
 
     Args:
         mediadatabase (media.MediaCollection): database to save media
@@ -33,7 +33,7 @@ def updatecategory(mediadatabase, category):
 
 
 def make_media(img):
-    """Create a media from an API image information
+    """Create a media from an API image information.
 
     Args:
         img (?): image information obtained from the API
@@ -61,7 +61,7 @@ def make_media(img):
 
 
 def main():
-    """ Main function of the updatedb module. """
+    """Main function of the updatedb module."""
     from argparse import ArgumentParser
     start_time = time.time()
     description = "MediaCollectionDB update script."

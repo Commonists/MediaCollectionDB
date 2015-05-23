@@ -28,26 +28,36 @@ def updatecategory(mediadatabase, category):
     site = mwclient.Site((COMMONS_PROTOCOL, COMMONS_SITE_URL))
     images = [img for img in site.Categories[category]]
     for img in images:
-        info = img.imageinfo
-        image = media.Media(img._info['pageid'],
-                            img.name,
-                            width=info['width'],
-                            height=info['height'],
-                            size=info['width'] * info['height'])
-        cats = [cat for cat in img.categories()]
-        revs = [rev for rev in img.revisions()]
-        # upload date and uploader
-        first_revision = revs[-1]
-        image.uploader = first_revision['user']
-        # qi/fp/vi
-        for cat in cats:
-            if cat.name == COMMONS_QI_CATEGORY:
-                image.quality_image = True
-            if cat.name == COMMONS_FP_CATEGORY:
-                image.featured_picture = True
-            if cat.name == COMMONS_VI_CATEGORY:
-                image.valued_image = True
+        image = make_media(img)
         mediadatabase.save(image)
+
+
+def make_media(img):
+    """Create a media from an API image information
+
+    Args:
+        img (?): image information obtained from the API
+    """
+    info = img.imageinfo
+    image = media.Media(img._info['pageid'],
+                        img.name,
+                        width=info['width'],
+                        height=info['height'],
+                        size=info['width'] * info['height'])
+    cats = [cat for cat in img.categories()]
+    revs = [rev for rev in img.revisions()]
+    # upload date and uploader
+    first_revision = revs[-1]
+    image.uploader = first_revision['user']
+    # qi/fp/vi
+    for cat in cats:
+        if cat.name == COMMONS_QI_CATEGORY:
+            image.quality_image = True
+        if cat.name == COMMONS_FP_CATEGORY:
+            image.featured_picture = True
+        if cat.name == COMMONS_VI_CATEGORY:
+            image.valued_image = True
+    return image
 
 
 def main():

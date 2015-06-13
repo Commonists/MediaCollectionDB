@@ -1,6 +1,6 @@
-"""Media and MediaCollection representations."""
+"""Media and MediaCollection representations.
 
-"""mediacollectiondb database define the media collection datbase
+mediacollectiondb database define the media collection datbase
 and provides tools to manage the database.
 """
 

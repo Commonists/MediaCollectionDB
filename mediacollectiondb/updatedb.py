@@ -1,11 +1,13 @@
 """ updatedb module allows you to update a media collection database. """
 
+import logging
 import time
 
 import mwclient
 
 import media
 
+DEFAULT_DB_FILE = 'category.db'
 
 COMMONS_SITE_URL = 'commons.wikimedia.org'
 COMMONS_PROTOCOL = 'https'
@@ -25,6 +27,7 @@ def updatecategory(mediadatabase, category):
     """
     site = mwclient.Site((COMMONS_PROTOCOL, COMMONS_SITE_URL))
     images = [img for img in site.Categories[category]]
+    logging.debug("%d images in category %s", len(images), category)
     for img in images:
         info = img.imageinfo
         image = media.Media(img._info['pageid'],
@@ -34,6 +37,10 @@ def updatecategory(mediadatabase, category):
                             size=info['width'] * info['height'])
         cats = [cat for cat in img.categories()]
         revs = [rev for rev in img.revisions()]
+        logging.debug("%s has %d revisions and is in %d categories",
+                      img.name,
+                      len(revs),
+                      len(cats))
         # upload date and uploader
         first_revision = revs[-1]
         image.uploader = first_revision['user']
@@ -60,10 +67,33 @@ def main():
                         required=False,
                         default=COMMONS_DEFAULT_CATEGORY,
                         help="Media Category")
+    parser.add_argument("-d", "--database",
+                        type=str,
+                        dest="dbfile",
+                        required=False,
+                        default=DEFAULT_DB_FILE,
+                        help="SQLite database file.")
+    verbosity_group = parser.add_mutually_exclusive_group()
+    verbosity_group.add_argument("-v",
+                                 action="count",
+                                 dest="verbose",
+                                 default=1,
+                                 help="Verbosity level. -v for DEBUG")
+    verbosity_group.add_argument("-q", "--quiet",
+                                 action="store_const",
+                                 dest="verbose",
+                                 const=0,
+                                 help="To silence the INFO messages")
     args = parser.parse_args()
-    mediadatabase = media.MediaCollection('category.db')
+    logging_map = {0: logging.WARNING,
+                   1: logging.INFO,
+                   2: logging.DEBUG}
+    logging_level = logging_map.get(args.verbose, logging.DEBUG)
+    logging.basicConfig(level=logging_level)
+    logging.info("Starting")
+    mediadatabase = media.MediaCollection(args.dbfile)
     updatecategory(mediadatabase, args.category)
-    print "--- Ended in %s seconds" % (time.time() - start_time)
+    logging.info("--- Ended in %s seconds", (time.time() - start_time))
 
 if __name__ == '__main__':
     main()

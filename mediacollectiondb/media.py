@@ -2,7 +2,10 @@
 and provides tools to manage the database.
 """
 
+import logging
 import sqlite3
+
+LOG = logging.getLogger('mediacollectiondb')
 
 
 class Media(object):
@@ -81,6 +84,9 @@ class MediaCollection(object):
     COLLECTIONS_TABLE = "media_collections"
 
     def __init__(self, filename):
+        import os
+        if not os.path.exists(filename):
+            LOG.warn("The database file %s doesn't exist yet.", filename)
         self.connection = sqlite3.connect(filename)
         self.cursor = self.connection.cursor()
         table_creation = """CREATE TABLE IF NOT EXISTS %s

@@ -1,4 +1,4 @@
-""" updatedb module allows you to update a media collection database. """
+"""updatedb module allows you to update a media collection database."""
 
 import logging
 import time
@@ -17,9 +17,11 @@ COMMONS_QI_CATEGORY = 'Category:Quality images'
 COMMONS_FP_CATEGORY = 'Category:Featured pictures on Wikimedia Commons'
 COMMONS_VI_CATEGORY = 'Category:Valued images sorted by promotion date'
 
+DEFAULT_DB_FILE = 'category.db'
+
 
 def updatecategory(mediadatabase, category):
-    """ adds media from a category to a database.
+    """Add media from a category to a database.
 
     Args:
         mediadatabase (media.MediaCollection): database to save media
@@ -29,34 +31,40 @@ def updatecategory(mediadatabase, category):
     images = [img for img in site.Categories[category]]
     logging.debug("%d images in category %s", len(images), category)
     for img in images:
-        info = img.imageinfo
-        image = media.Media(img._info['pageid'],
-                            img.name,
-                            width=info['width'],
-                            height=info['height'],
-                            size=info['width'] * info['height'])
-        cats = [cat for cat in img.categories()]
-        revs = [rev for rev in img.revisions()]
-        logging.debug("%s has %d revisions and is in %d categories",
-                      img.name,
-                      len(revs),
-                      len(cats))
-        # upload date and uploader
-        first_revision = revs[-1]
-        image.uploader = first_revision['user']
-        # qi/fp/vi
-        for cat in cats:
-            if cat.name == COMMONS_QI_CATEGORY:
-                image.quality_image = True
-            if cat.name == COMMONS_FP_CATEGORY:
-                image.featured_picture = True
-            if cat.name == COMMONS_VI_CATEGORY:
-                image.valued_image = True
+        image = make_media(img)
         mediadatabase.save(image)
 
 
+def make_media(img):
+    """Create a media from an API image information.
+
+    Args:
+        img (?): image information obtained from the API
+    """
+    info = img.imageinfo
+    image = media.Media(img._info['pageid'],
+                        img.name,
+                        width=info['width'],
+                        height=info['height'],
+                        size=info['width'] * info['height'])
+    cats = [cat for cat in img.categories()]
+    revs = [rev for rev in img.revisions()]
+    # upload date and uploader
+    first_revision = revs[-1]
+    image.uploader = first_revision['user']
+    # qi/fp/vi
+    for cat in cats:
+        if cat.name == COMMONS_QI_CATEGORY:
+            image.quality_image = True
+        if cat.name == COMMONS_FP_CATEGORY:
+            image.featured_picture = True
+        if cat.name == COMMONS_VI_CATEGORY:
+            image.valued_image = True
+    return image
+
+
 def main():
-    """ Main function of the updatedb module. """
+    """Main function of the updatedb module."""
     from argparse import ArgumentParser
     start_time = time.time()
     description = "MediaCollectionDB update script."
@@ -67,12 +75,12 @@ def main():
                         required=False,
                         default=COMMONS_DEFAULT_CATEGORY,
                         help="Media Category")
-    parser.add_argument("-d", "--database",
+    parser.add_argument("-f", "--file",
                         type=str,
-                        dest="dbfile",
-                        required=False,
+                        dest="file",
+                        require=False,
                         default=DEFAULT_DB_FILE,
-                        help="SQLite database file.")
+                        help="Database file, default: category.db")
     verbosity_group = parser.add_mutually_exclusive_group()
     verbosity_group.add_argument("-v",
                                  action="count",

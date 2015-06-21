@@ -1,9 +1,9 @@
-""" Metrics module provide metrics for the Media Collections. """
+"""Metrics module provide metrics for the Media Collections."""
 
 
 class MediaCollectionsMetrics(object):
 
-    """ Media Collections Metrics.
+    """Media Collections Metrics.
 
     Attributes:
         collections (list): list of MediaCollections
@@ -12,13 +12,16 @@ class MediaCollectionsMetrics(object):
     """
 
     def __init__(self, collections):
-        """ Constructor. """
+        """Constructor.
+
+        Args:
+            collections (list): list of MediaCollections
+        """
         self.collections = collections
         self.cache_allmedia = None
 
     def listall(self):
-        """ List allmedia Media objects from the list of the set
-        of media collections. """
+        """List all Media objects from the media collections."""
         if self.cache_allmedia is None:
             self.cache_allmedia = []
             for collection in self.collections:
@@ -27,30 +30,27 @@ class MediaCollectionsMetrics(object):
         return self.cache_allmedia
 
     def mediacount(self):
-        """ Return the mediacount metric. """
+        """Return the mediacount metric."""
         return len(self.listall())
 
     def qicount(self):
-        """ Return the qicount metric which represents the amount of
-        quality images in the set of collections."""
+        """Return the amount of quality images in the set of collections."""
         qualityimages = [qi for qi in self.listall() if qi.quality_image]
         return len(qualityimages)
 
     def vicount(self):
-        """ Return the vicount metric which counts the amount of valued images
-        in the set of collections. """
+        """Return the amount of valued images in the set of collections."""
         valuedimages = [vi for vi in self.listall() if vi.valued_image]
         return len(valuedimages)
 
     def fpcount(self):
-        """ Returns the fpcount metric which represents the amount of featured
-        pictures in the set of collections."""
+        """Return the amount of featured pictures in the set of collections."""
         featuredpictures = [fp for fp in self.listall() if fp.featured_picture]
         return len(featuredpictures)
 
     def widthcount(self, width):
-        """ Return the widthcount metric which represents the amount
-        of pictures with a wider border greater than the minimal width.
+        """Return the amount of pictures with a wider border greater than
+        the minimal width.
 
         Args:
             width (int): minimal width.
@@ -64,10 +64,10 @@ class MediaCollectionsMetrics(object):
         return len(widthimages)
 
     def pixelcount(self):
-        """ Return the total amount of pixels within all media collections. """
+        """Return the total amount of pixels within all media collections."""
         return sum([img.size for img in self.listall()])
 
     def qualitypixelcount(self):
-        """ Return the total amount of pixels from quality images in all media
-        collections."""
+        """Return the total amount of pixels from quality images in all media
+         collections."""
         return sum([img.size for img in self.listall() if img.quality_image])

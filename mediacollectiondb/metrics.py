@@ -49,8 +49,7 @@ class MediaCollectionsMetrics(object):
         return len(featuredpictures)
 
     def widthcount(self, width):
-        """Return the amount of pictures with a wider border greater than
-        the minimal width.
+        """Amount of pictures with a wider border greater than minimal width.
 
         Args:
             width (int): minimal width.

@@ -30,21 +30,21 @@ class MediaCollectionsMetrics(object):
         return self.cache_allmedia
 
     def mediacount(self):
-        """Return the mediacount metric."""
+        """Count of media in the collections."""
         return len(self.listall())
 
     def qicount(self):
-        """Return the amount of quality images in the set of collections."""
+        """Amount of quality images in the set of collections."""
         qualityimages = [qi for qi in self.listall() if qi.quality_image]
         return len(qualityimages)
 
     def vicount(self):
-        """Return the amount of valued images in the set of collections."""
+        """Amount of valued images in the set of collections."""
         valuedimages = [vi for vi in self.listall() if vi.valued_image]
         return len(valuedimages)
 
     def fpcount(self):
-        """Return the amount of featured pictures in the set of collections."""
+        """Amount of featured pictures in the set of collections."""
         featuredpictures = [fp for fp in self.listall() if fp.featured_picture]
         return len(featuredpictures)
 
@@ -63,10 +63,9 @@ class MediaCollectionsMetrics(object):
         return len(widthimages)
 
     def pixelcount(self):
-        """Return the total amount of pixels within all media collections."""
+        """Amount of pixels within all media collections."""
         return sum([img.size for img in self.listall()])
 
     def qualitypixelcount(self):
-        """Return the total amount of pixels from quality images in all media
-         collections."""
+        """Amount of pixels from quality images in all media collections."""
         return sum([img.size for img in self.listall() if img.quality_image])

@@ -42,7 +42,7 @@ def make_media(img):
         img (?): image information obtained from the API
     """
     info = img.imageinfo
-    image = media.Media(img._info['pageid'],
+    image = media.Media(img.pageid,
                         img.name,
                         width=info['width'],
                         height=info['height'],

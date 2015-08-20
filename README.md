@@ -6,3 +6,5 @@
 [![License](http://img.shields.io/badge/license-MIT-orange.svg?style=flat)](http://opensource.org/licenses/MIT)
 
 Media Collection database for MediaWiki
+- update.py updates a database.
+- metrics.py provides metrics on a database.

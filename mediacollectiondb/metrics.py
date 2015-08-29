@@ -65,11 +65,12 @@ class MediaCollectionsMetrics(object):
 
     def pixelcount(self):
         """Amount of pixels within all media collections."""
-        return sum([img.size for img in self.listall()])
+        return sum([img.width * img.height for img in self.listall()])
 
     def qualitypixelcount(self):
         """Amount of pixels from quality images in all media collections."""
-        return sum([img.size for img in self.listall() if img.quality_image])
+        return sum([img.width * img.height for img in self.listall()
+                    if img.quality_image])
 
     def uploadercount(self):
         """Amount of distinct uploader."""

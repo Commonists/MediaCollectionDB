@@ -48,7 +48,7 @@ def make_media(img):
                         img.name,
                         width=info['width'],
                         height=info['height'],
-                        size=info['width'] * info['height'])
+                        size=info['size'])
     cats = [cat for cat in img.categories()]
     revs = [rev for rev in img.revisions()]
     # upload date and uploader

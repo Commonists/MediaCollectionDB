@@ -77,8 +77,8 @@ def main():
                         help="Media Category")
     parser.add_argument("-f", "--file",
                         type=str,
-                        dest="file",
-                        require=False,
+                        dest="dbfile",
+                        required=False,
                         default=DEFAULT_DB_FILE,
                         help="Database file, default: category.db")
     verbosity_group = parser.add_mutually_exclusive_group()

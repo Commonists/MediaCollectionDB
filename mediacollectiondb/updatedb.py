@@ -11,12 +11,12 @@ DEFAULT_DB_FILE = 'category.db'
 
 COMMONS_SITE_URL = 'commons.wikimedia.org'
 COMMONS_PROTOCOL = 'https'
-COMMONS_DEFAULT_CATEGORY = 'Images supported by Wikimedia France - Lutz'
-
+COMMONS_FILE_NAMESPACE = 6
 COMMONS_QI_CATEGORY = 'Category:Quality images'
 COMMONS_FP_CATEGORY = 'Category:Featured pictures on Wikimedia Commons'
 COMMONS_VI_CATEGORY = 'Category:Valued images sorted by promotion date'
 
+COMMONS_DEFAULT_CATEGORY = 'Images supported by Wikimedia France - Lutz'
 DEFAULT_DB_FILE = 'category.db'
 
 
@@ -28,7 +28,9 @@ def updatecategory(mediadatabase, category):
         category (str): category to update
     """
     site = mwclient.Site((COMMONS_PROTOCOL, COMMONS_SITE_URL))
-    images = [img for img in site.Categories[category]]
+    # search page in category and keeps only images
+    images = [img for img in site.Categories[category]
+              if img.namespace == COMMONS_FILE_NAMESPACE]
     logging.debug("%d images in category %s", len(images), category)
     for img in images:
         image = make_media(img)

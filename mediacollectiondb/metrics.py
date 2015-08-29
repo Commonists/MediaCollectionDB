@@ -19,6 +19,7 @@ class MediaCollectionsMetrics(object):
         """
         self.collections = collections
         self.cache_allmedia = None
+        self.uploaders = None
 
     def listall(self):
         """List all Media objects from the media collections."""
@@ -69,3 +70,12 @@ class MediaCollectionsMetrics(object):
     def qualitypixelcount(self):
         """Amount of pixels from quality images in all media collections."""
         return sum([img.size for img in self.listall() if img.quality_image])
+
+    def uploadercount(self):
+        """Amount of distinct uploader."""
+        if self.uploaders is None:
+            self.uploaders = []
+            for img in self.listall():
+                if img.uploader not in self.uploaders:
+                    self.uploaders.append(img.uploader)
+        return len(self.uploaders)

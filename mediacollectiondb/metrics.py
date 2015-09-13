@@ -18,17 +18,17 @@ class MediaCollectionsMetrics(object):
             collections (list): list of MediaCollections
         """
         self.collections = collections
-        self.cache_allmedia = None
-        self.uploaders = None
+        self._cache_allmedia = None
+        self._uploaders = None
 
     def listall(self):
         """List all Media objects from the media collections."""
-        if self.cache_allmedia is None:
-            self.cache_allmedia = []
+        if self._cache_allmedia is None:
+            self._cache_allmedia = []
             for collection in self.collections:
-                self.cache_allmedia.extend(collection.listall())
+                self._cache_allmedia.extend(collection.listall())
         # else returns the cache value
-        return self.cache_allmedia
+        return self._cache_allmedia
 
     def mediacount(self):
         """Count of media in the collections."""
@@ -74,9 +74,9 @@ class MediaCollectionsMetrics(object):
 
     def uploadercount(self):
         """Amount of distinct uploader."""
-        if self.uploaders is None:
-            self.uploaders = []
+        if self._uploaders is None:
+            self._uploaders = []
             for img in self.listall():
-                if img.uploader not in self.uploaders:
-                    self.uploaders.append(img.uploader)
-        return len(self.uploaders)
+                if img.uploader not in self._uploaders:
+                    self._uploaders.append(img.uploader)
+        return len(self._uploaders)

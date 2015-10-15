@@ -8,3 +8,9 @@
 Media Collection database for MediaWiki
 - update.py updates a database.
 - metrics.py provides metrics on a database.
+
+Usage
+-----
+```sh
+python update.py -c "Media supported by Wikimedia France" -f "mydb.db"
+```
